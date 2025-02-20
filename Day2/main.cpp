@@ -5,6 +5,33 @@
 #include <algorithm>
 #include <sstream>
 
+std::vector<std::vector<int>> getInput() {
+	std::ifstream inputFile("input.txt");
+	if (!inputFile) {
+		std::cerr << "Error: Could not open the file!" << std::endl;
+		return {};
+	}
+
+	std::vector<std::vector<int>> input;
+	std::string line;
+
+	while (std::getline(inputFile, line)) {
+		std::stringstream ss(line);
+		std::vector<int> row;
+		int num;
+		while (ss >> num) {
+			row.push_back(num);
+		}
+		if (!row.empty()) {
+			input.push_back(row);
+		}
+	}
+
+	inputFile.close();
+
+	return input;
+}
+
 bool safelyIncreasing(const std::vector<int>& row) {
 	for (int i = 0; i < row.size() - 1; ++i) {
 		if (row[i] >= row[i + 1] || row[i + 1] - row[i] > 3) {
@@ -35,28 +62,10 @@ bool ProblemDampener(const std::vector<int>& row) {
 }
 
 int main() {
-	std::ifstream inputFile("input.txt");
-	if (!inputFile) {
-		std::cerr << "Error: Could not open the file!" << std::endl;
+	auto input = getInput();
+	if (input.empty()) {
 		return 1;
 	}
-
-	std::vector<std::vector<int>> input;
-	std::string line;
-
-	while (std::getline(inputFile, line)) {
-		std::stringstream ss(line);
-		std::vector<int> row;
-		int num;
-		while (ss >> num) {
-			row.push_back(num);
-		}
-		if (!row.empty()) {
-			input.push_back(row);
-		}
-	}
-
-	inputFile.close();
 
 	int safe = 0;
 
